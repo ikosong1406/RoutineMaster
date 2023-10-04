@@ -1,29 +1,39 @@
 import { Dimensions, StyleSheet, Text, View, Image, TouchableOpacity, TextInput, Button} from 'react-native'
-import React from 'react'
+import React, { useState } from 'react';
+import { FontAwesome5 } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
 import Colors from '../components/Colors';
 import { useFonts } from 'expo-font'; 
-import { FontAwesome5 } from '@expo/vector-icons';
+import { firebase } from '../../firebase/firebase';
 
 const { width, height } = Dimensions.get('window')
 
-const Login = () => {
+const Login = ({ navigation }) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-    const [fontsLoaded] = useFonts({
-        'TiltPrism Variable': require('../../assets/fonts/LilitaOne-Regular.ttf'),
-      });
-    
-      if (!fontsLoaded) {
-        return null;
+  const [fontsLoaded] = useFonts({
+    'TiltPrism Variable': require('../../assets/fonts/LilitaOne-Regular.ttf'),
+  });
+
+  if (!fontsLoaded) {
+    return null;
+  }
+
+  const handleLogin = async (email, password) => {
+    try {
+    //   if (email && password) {
+        await firebase.auth().signInWithEmailAndPassword(email, password);
+    //     alert('Login successful');
+    //     navigation.navigate('Tab'); // Navigate to the Tab screen upon successful login
+    //   } else {
+    //     alert('Please fill in both email and password.');
+    //   }
+    } catch (error) {
+      alert('Login failed: ' + error.message);
+      console.log(error.message);
     }
-
-    const handleLogin = () => {
-        // You can implement your authentication logic here
-        // if (username === 'user' && password === 'password') {
-        //   alert('Login successful');
-        // } else {
-        //   alert('Invalid credentials');
-        // }
-      };
+  };
 
   return (
     <View style={styles.container}>
@@ -36,21 +46,21 @@ const Login = () => {
         
             <View style={{padding: width * 0.08, marginTop: height * 0.03}}>
                 <View style={{flexDirection: 'row', borderWidth: width * 0.005, borderColor: Colors.white, borderRadius: 8, paddingVertical: height * 0.01}}>
-                    <FontAwesome5 name="envelope" size={24} color={Colors.darkGray} style={{marginLeft: width * 0.05}} />
+                    <FontAwesome5 name="envelope" size={width * 0.06} color={Colors.darkGray} style={{marginLeft: width * 0.05}} />
                     <TextInput
                     style={styles.input}
-                    placeholder="Username"
-                    // value={username}
-                    onChangeText={(text) => setUsername(text)}
+                    placeholder="Email"
+                    value={email}
+                    onChangeText={(text) => setEmail(text)}
                     />
                 </View>
                 <View style={{flexDirection: 'row', borderWidth: width * 0.005, borderColor: Colors.white, borderRadius: 8, marginTop: height * 0.02, paddingVertical: height * 0.01}}>
-                <FontAwesome5 name="lock" size={24} color={Colors.darkGray} style={{ marginLeft: width * 0.05}}  />
+                    <FontAwesome5 name="lock" size={width * 0.06} color={Colors.darkGray} style={{ marginLeft: width * 0.05}}  />
                     <TextInput
                     style={styles.input}
                     placeholder="Password"
                     secureTextEntry
-                    // value={password}
+                    value={password}
                     onChangeText={(text) => setPassword(text)}
                     />
                 </View>
@@ -59,6 +69,16 @@ const Login = () => {
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.btn} title="Login" onPress={handleLogin}>
                     <Text style={{color: Colors.darkGray, fontWeight: '700', fontSize: width * 0.06, textAlign: 'center'}}> Login </Text>
+                </TouchableOpacity>
+            </View>
+
+            <View style={{flexDirection: 'row', alignSelf: 'center', marginTop: height * 0.03}}>
+                <TouchableOpacity>
+                    <AntDesign name="google" size={width * 0.13} color="#de5246" />
+                </TouchableOpacity>
+                <Text style={{fontWeight: '700', marginTop: height * 0.02, marginLeft: width * 0.05}}> OR </Text>
+                <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
+                    <Text style={{color: Colors.lightGray, fontWeight: '700', fontSize: width * 0.065, marginTop: height * 0.01, marginLeft: width * 0.03}}> Sign Up</Text>
                 </TouchableOpacity>
             </View>
         </View>

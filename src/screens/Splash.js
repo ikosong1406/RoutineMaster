@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontFamily: 'TiltPrism Variable',
-    fontSize: width * 0.17,
+    fontSize: width * 0.13,
     color: Colors.vibrantOrange,
     marginTop: height * 0.1,
     textAlign: 'center'
@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.vibrantOrange,
     width: width * 0.5,
     height: height * 0.05,
-    borderRadius: width * 0.05,
+    borderRadius: 8,
     alignSelf: 'center',
     marginTop: height * 0.13,
   },
