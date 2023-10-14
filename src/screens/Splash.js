@@ -1,44 +1,53 @@
-import { Dimensions, StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
-import React from 'react'
-import Colors from '../components/Colors';
-import { useFonts } from 'expo-font'; 
+import {
+  Dimensions,
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+  SafeAreaView,
+} from "react-native";
+import React from "react";
+import Colors from "../components/Colors";
+import { useFonts } from "expo-font";
 
-const { width, height } = Dimensions.get('window')
+const { width, height } = Dimensions.get("window");
 
-const Splash = ({navigation}) => {
+const Splash = ({ navigation }) => {
+  const [fontsLoaded] = useFonts({
+    "TiltPrism Variable": require("../../assets/fonts/LilitaOne-Regular.ttf"),
+  });
 
-    const [fontsLoaded] = useFonts({
-        'TiltPrism Variable': require('../../assets/fonts/LilitaOne-Regular.ttf'),
-      });
-    
-      if (!fontsLoaded) {
-        return null;
-      }
-
+  if (!fontsLoaded) {
+    return null;
+  }
 
   return (
-    <View style={styles.container}>
-        <Image
-        source={require('../../assets/images/task.jpg')}
+    <SafeAreaView style={styles.container}>
+      <Image
+        source={require("../../assets/images/task.jpg")}
         style={styles.image}
-        />
-        <Text style={styles.text}> RoutineMaster</Text>
-        <View style={{marginTop: height * 0.02}}>
+      />
+      <Text style={styles.text}> RoutineMaster</Text>
+      <View style={{ marginTop: height * 0.02 }}>
         <Text style={styles.text1}> Stay organized and productive.</Text>
         <Text style={styles.text1}> Never miss a task or activity again!</Text>
-        </View>
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Login')}>
-            <Text style={styles.buttonText}> Get Started </Text>
-        </TouchableOpacity>
-        <Image
-        source={require('../../assets/images/task.jpg')}
+      </View>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.navigate("Login")}
+      >
+        <Text style={styles.buttonText}> Get Started </Text>
+      </TouchableOpacity>
+      <Image
+        source={require("../../assets/images/task.jpg")}
         style={styles.image1}
-        />
-    </View>
-  )
-}
+      />
+    </SafeAreaView>
+  );
+};
 
-export default Splash
+export default Splash;
 
 const styles = StyleSheet.create({
   container: {
@@ -46,17 +55,17 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   text: {
-    fontFamily: 'TiltPrism Variable',
+    fontFamily: "TiltPrism Variable",
     fontSize: width * 0.13,
     color: Colors.vibrantOrange,
     marginTop: height * 0.1,
-    textAlign: 'center'
+    textAlign: "center",
   },
   text1: {
     color: Colors.darkGray,
     fontSize: width * 0.05,
-    fontWeight: '500',
-    textAlign: 'center',
+    fontWeight: "500",
+    textAlign: "center",
     marginTop: height * 0.02,
   },
   image: {
@@ -75,14 +84,14 @@ const styles = StyleSheet.create({
     width: width * 0.5,
     height: height * 0.05,
     borderRadius: 8,
-    alignSelf: 'center',
+    alignSelf: "center",
     marginTop: height * 0.13,
   },
   buttonText: {
     color: Colors.darkGray,
-    textAlign: 'center',
-   marginTop: height * 0.01,
-   fontSize: width * 0.05,
-   fontWeight: '700',
-  }
-})
+    textAlign: "center",
+    marginTop: height * 0.01,
+    fontSize: width * 0.05,
+    fontWeight: "700",
+  },
+});

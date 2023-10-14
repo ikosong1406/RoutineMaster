@@ -1,100 +1,174 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import React from "react";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+  SafeAreaView,
+  ScrollView,
+} from "react-native";
+import Ionicons from "react-native-vector-icons/Ionicons";
+import { Entypo } from "@expo/vector-icons";
+import DateTime from "../components/DateTime";
+import Colors from "../components/Colors";
+import { FontAwesome } from "@expo/vector-icons";
 
 const HomeScreen = () => {
+  const tasks = [
+    {
+      title: "do assignment",
+      description: "do your maths and physics assignment",
+      date: "14 June",
+      time: "2:45pm",
+    },
+    {
+      title: "another task",
+      description: "description of another task",
+      date: "15 June",
+      time: "3:00pm",
+    },
+    {
+      title: "yet another task",
+      description: "description of yet another task",
+      date: "16 June",
+      time: "4:15pm",
+    },
+    {
+      title: "do assignment",
+      description: "do your maths and physics assignment",
+      date: "14 June",
+      time: "2:45pm",
+    },
+    {
+      title: "another task",
+      description: "description of another task",
+      date: "15 June",
+      time: "3:00pm",
+    },
+    {
+      title: "yet another task",
+      description: "description of yet another task",
+      date: "16 June",
+      time: "4:15pm",
+    },
+    {
+      title: "do assignment",
+      description: "do your maths and physics assignment",
+      date: "14 June",
+      time: "2:45pm",
+    },
+    {
+      title: "another task",
+      description: "description of another task",
+      date: "15 June",
+      time: "3:00pm",
+    },
+    {
+      title: "yet another task",
+      description: "description of yet another task",
+      date: "16 June",
+      time: "4:15pm",
+    },
+  ];
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Ionicons name="menu" size={24} color="#00A5CF" />
+        <TouchableOpacity>
+          <Image
+            source={require("../../assets/images/alex.jpg")}
+            style={{ width: 60, height: 60, borderRadius: 100 }}
+          />
+        </TouchableOpacity>
+        <Text style={{ fontSize: 28, marginLeft: 65, fontWeight: "900" }}>
+          {" "}
+          To-Do List
+        </Text>
+        <FontAwesome
+          name="search"
+          size={24}
+          color="black"
+          style={{ marginLeft: 90 }}
+        />
       </View>
+      <DateTime />
       <View style={styles.dailyOverview}>
         <Text style={styles.sectionTitle}>Daily Overview</Text>
-        <View style={styles.activityCard}>
-          <Ionicons name="book-outline" size={24} color="#00A5CF" />
-          <Text>10:00 AM</Text>
-          <Text>Reading</Text>
-          <Text>Read a chapter from a book</Text>
-        </View>
-        <View style={styles.activityCard}>
-          <Ionicons name="bicycle-outline" size={24} color="#00A5CF" />
-          <Text>02:00 PM</Text>
-          <Text>Exercise</Text>
-          <Text>Go for a bike ride</Text>
-        </View>
-        {/* Add more activity cards here */}
+        <ScrollView>
+          {tasks.map((task, index) => (
+            <TouchableOpacity key={index} style={styles.activityCard}>
+              <Text style={styles.activityTitle}>{task.title}</Text>
+              <Text style={styles.activityDescription}>{task.description}</Text>
+              <View
+                style={{ width: "100%", height: "6%", color: Colors.darkGray }}
+              ></View>
+              <View style={{ display: "flex", flexDirection: "row" }}>
+                <Text style={styles.activityDate}>{task.date}</Text>
+                <Text style={styles.activityTime}>{task.time}</Text>
+              </View>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+        <View style={{ height: 550 }} />
       </View>
-      <TouchableOpacity style={styles.addButton}>
-        <Text style={styles.addButtonText}>Add Activity</Text>
+
+      <TouchableOpacity style={styles.button}>
+        <Text> Add New Task </Text>
+        <Entypo name="plus" size={24} color="black" />
       </TouchableOpacity>
-      {/* Upcoming Reminders */}
-      {/* Empty State Message */}
-      <View style={styles.quickAccessIcons}>
-        <Ionicons name="star-outline" size={36} color="#00A5CF" />
-        <Ionicons name="heart-outline" size={36} color="#00A5CF" />
-        <Ionicons name="bookmark-outline" size={36} color="#00A5CF" />
-      </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: Colors.lightGray,
   },
   header: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-  },
-  createNewButton: {
-    backgroundColor: '#00A5CF',
-    borderRadius: 8,
-    marginHorizontal: 16,
-    padding: 12,
-    alignItems: 'center',
-    marginBottom: 10,
-  },
-  createNewButtonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 7,
   },
   dailyOverview: {
-    padding: 16,
+    padding: 10,
   },
   sectionTitle: {
     fontSize: 18,
     marginBottom: 10,
   },
   activityCard: {
-    backgroundColor: 'white',
+    backgroundColor: Colors.lightBlue,
     borderRadius: 8,
     padding: 12,
     marginBottom: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
   },
-  addButton: {
-    backgroundColor: '#FFA500',
-    borderRadius: 8,
-    marginHorizontal: 16,
-    padding: 12,
-    alignItems: 'center',
-    marginBottom: 20,
+  activityTitle: {
+    fontSize: 20,
+    color: Colors.white,
   },
-  addButtonText: {
-    color: 'white',
+  activityDescription: {
+    fontSize: 14,
+    color: Colors.white,
+  },
+  activityDate: {
     fontSize: 16,
-    fontWeight: 'bold',
+    color: Colors.white,
   },
-  quickAccessIcons: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    padding: 16,
+  activityTime: {
+    fontSize: 16,
+    color: Colors.white,
+    marginLeft: 20,
+  },
+  button: {
+    zIndex: 99,
+    backgroundColor: Colors.vibrantOrange,
+    display: "flex",
+    flexDirection: "row",
+    alignContent: "center",
+    width: "50%",
+    padding: 10,
+    borderRadius: 10,
   },
 });
 
