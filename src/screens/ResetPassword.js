@@ -10,18 +10,15 @@ import {
   ActivityIndicator,
 } from "react-native";
 import React, { useState } from "react";
-import { FontAwesome5 } from "@expo/vector-icons";
-import { AntDesign } from "@expo/vector-icons";
 import Colors from "../components/Colors";
 import { useFonts } from "expo-font";
-import { firebase } from "../../firebase/firebase";
-import { auth } from "../../firebase/firebase";
+import { FontAwesome5 } from "@expo/vector-icons";
 
 const { width, height } = Dimensions.get("window");
 
-const Login = ({ navigation }) => {
-  const [email, setEmail] = useState("");
+const ResetPassword = ({ navigation }) => {
   const [password, setPassword] = useState("");
+  const [confirmpassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
   // Define your fontsLoaded state within the component
@@ -33,22 +30,9 @@ const Login = ({ navigation }) => {
     return null;
   }
 
-  const handleLogin = async () => {
-    navigation.navigate("Tab");
-    // setLoading(true);
-    // try {
-    //   await firebase.auth().signInWithEmailAndPassword(email, password);
-    //   navigation.navigate("Tab");
-    // } catch (error) {
-    //   console.log(error);
-    //   alert("Sign in failed:" + error.message);
-    // } finally {
-    //   setLoading(false);
-    // }
-  };
-
-  const handleForgot = () => {
-    navigation.navigate("ForgotPassword");
+  const handleConfirm = async () => {
+    alert("Account has been recovered");
+    navigation.navigate("Login");
   };
 
   return (
@@ -58,7 +42,7 @@ const Login = ({ navigation }) => {
         style={styles.image}
       />
       <View style={styles.c1}>
-        <Text style={styles.text}>Login</Text>
+        <Text style={styles.text}>Reset Password</Text>
 
         <View style={{ padding: width * 0.08, marginTop: height * 0.03 }}>
           <View
@@ -68,29 +52,7 @@ const Login = ({ navigation }) => {
               borderColor: Colors.white,
               borderRadius: 8,
               paddingVertical: height * 0.01,
-            }}
-          >
-            <FontAwesome5
-              name="envelope"
-              size={width * 0.06}
-              color={Colors.darkGray}
-              style={{ marginLeft: width * 0.05 }}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Email"
-              value={email}
-              onChangeText={(text) => setEmail(text)}
-            />
-          </View>
-          <View
-            style={{
-              flexDirection: "row",
-              borderWidth: width * 0.005,
-              borderColor: Colors.white,
-              borderRadius: 8,
               marginTop: height * 0.02,
-              paddingVertical: height * 0.01,
             }}
           >
             <FontAwesome5
@@ -107,24 +69,33 @@ const Login = ({ navigation }) => {
               onChangeText={(text) => setPassword(text)}
             />
           </View>
-          <TouchableOpacity
-            style={{ marginTop: height * 0.015 }}
-            onPress={handleForgot}
+          <View
+            style={{
+              flexDirection: "row",
+              borderWidth: width * 0.005,
+              borderColor: Colors.white,
+              borderRadius: 8,
+              paddingVertical: height * 0.01,
+              marginTop: height * 0.02,
+            }}
           >
-            <Text
-              style={{
-                color: Colors.darkGray,
-                textAlign: "right",
-                fontSize: width * 0.04,
-              }}
-            >
-              Forgot Password ?
-            </Text>
-          </TouchableOpacity>
+            <FontAwesome5
+              name="lock"
+              size={width * 0.06}
+              color={Colors.darkGray}
+              style={{ marginLeft: width * 0.05 }}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Confirm Password"
+              value={confirmpassword}
+              onChangeText={(text) => setConfirmPassword(text)}
+            />
+          </View>
           <TouchableOpacity
             style={styles.btn}
             title="Login"
-            onPress={handleLogin}
+            onPress={handleConfirm}
           >
             {loading ? (
               <ActivityIndicator size="large" color="black" />
@@ -137,7 +108,7 @@ const Login = ({ navigation }) => {
                   textAlign: "center",
                 }}
               >
-                Login
+                Confirm
               </Text>
             )}
           </TouchableOpacity>
@@ -149,39 +120,13 @@ const Login = ({ navigation }) => {
             alignSelf: "center",
             marginTop: height * 0.03,
           }}
-        >
-          <TouchableOpacity>
-            <AntDesign name="google" size={width * 0.13} color="#de5246" />
-          </TouchableOpacity>
-          <Text
-            style={{
-              fontWeight: "700",
-              marginTop: height * 0.02,
-              marginLeft: width * 0.05,
-            }}
-          >
-            OR
-          </Text>
-          <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
-            <Text
-              style={{
-                color: Colors.lightGray,
-                fontWeight: "700",
-                fontSize: width * 0.065,
-                marginTop: height * 0.01,
-                marginLeft: width * 0.03,
-              }}
-            >
-              Sign Up
-            </Text>
-          </TouchableOpacity>
-        </View>
+        ></View>
       </View>
     </View>
   );
 };
 
-export default Login;
+export default ResetPassword;
 
 const styles = StyleSheet.create({
   container: {
@@ -189,7 +134,7 @@ const styles = StyleSheet.create({
   },
   c1: {
     backgroundColor: Colors.lightBlue,
-    width: width * 1,
+    width: "100%",
     height: height * 1,
     borderTopLeftRadius: width * 0.5,
     zIndex: 2,
@@ -202,7 +147,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontFamily: "TiltPrism Variable",
-    fontSize: width * 0.17,
+    fontSize: width * 0.12,
     color: Colors.darkGray,
     marginTop: height * 0.1,
     textAlign: "center",

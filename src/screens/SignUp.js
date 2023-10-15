@@ -19,9 +19,9 @@ import { FontAwesome } from "@expo/vector-icons";
 const { width, height } = Dimensions.get("window");
 
 const SignupScreen = ({ navigation }) => {
-  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmpassword, setConfirmPassword] = useState("");
   const [agreeTerms, setAgreeTerms] = useState(false);
 
   // const handleSignup = async () => {
@@ -37,40 +37,8 @@ const SignupScreen = ({ navigation }) => {
   //   }
   // };
 
-  const handleSignup = async (username, email, password) => {
-    // Keyboard.dismiss()
-    if (!email) {
-      Alert.alert("Email can't be empty");
-    } else if (!EmailRegex.test(email)) {
-      Alert.alert("Email is not in the right format");
-    } else if (!password && password.trim() && password.length < 5) {
-      Alert.alert("Password is too weak and required min 6 characters");
-    } else {
-      try {
-        const Email = await firebase
-          .auth()
-          .createUserWithEmailAndPassword(email, password);
-        Email.user.updateProfile({ displayName: username });
-        Email.user.reload();
-
-        setUsername("");
-        setEmail("");
-        setPassword("");
-        props.navigation.navigate("Login");
-      } catch (error) {
-        console.log("error", error.message, error.code);
-        switch (error.code) {
-          case "auth/weak-password":
-            Alert.alert("Password is invalid,requires min 6 char");
-            break;
-          case "auth/email-already-in-use":
-            Alert.alert("Email is already registered");
-            break;
-          default:
-            Alert.alert("Error");
-        }
-      }
-    }
+  const handleSignup = async () => {
+    navigation.navigate("Verify");
   };
 
   const handleLogin = () => {
@@ -95,29 +63,6 @@ const SignupScreen = ({ navigation }) => {
               borderColor: Colors.white,
               borderRadius: 8,
               paddingVertical: height * 0.01,
-            }}
-          >
-            <FontAwesome
-              name="user"
-              size={width * 0.06}
-              color={Colors.darkGray}
-              style={{ marginLeft: width * 0.05 }}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Username"
-              value={username}
-              onChangeText={(text) => setUsername(text)}
-            />
-          </View>
-          <View
-            style={{
-              flexDirection: "row",
-              borderWidth: width * 0.005,
-              borderColor: Colors.white,
-              borderRadius: 8,
-              paddingVertical: height * 0.01,
-              marginTop: height * 0.02,
             }}
           >
             <FontAwesome5
@@ -155,6 +100,29 @@ const SignupScreen = ({ navigation }) => {
               secureTextEntry
               value={password}
               onChangeText={(text) => setPassword(text)}
+            />
+          </View>
+          <View
+            style={{
+              flexDirection: "row",
+              borderWidth: width * 0.005,
+              borderColor: Colors.white,
+              borderRadius: 8,
+              paddingVertical: height * 0.01,
+              marginTop: height * 0.02,
+            }}
+          >
+            <FontAwesome5
+              name="lock"
+              size={width * 0.06}
+              color={Colors.darkGray}
+              style={{ marginLeft: width * 0.05 }}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Confirm Password"
+              value={confirmpassword}
+              onChangeText={(text) => setConfirmPassword(text)}
             />
           </View>
 

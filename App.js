@@ -8,6 +8,11 @@ import Splash from "./src/screens/Splash";
 import Login from "./src/screens/Login";
 import SignupScreen from "./src/screens/SignUp";
 import BottomTabNavigator from "./src/components/BottomTabNavigator";
+import ForgotPassword from "./src/screens/ForgotPassword";
+import Verify1 from "./src/screens/Verify1";
+import ResetPassword from "./src/screens/ResetPassword";
+import Verify from "./src/screens/Verify";
+import UserRegister from "./src/screens/UserResgister";
 
 const Stack = createStackNavigator();
 
@@ -50,6 +55,31 @@ const App = () => {
         <Stack.Screen
           name="Tab"
           component={BottomTabNavigator}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ForgotPassword"
+          component={ForgotPassword}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="verify1"
+          component={Verify1}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ResetPassword"
+          component={ResetPassword}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Verify"
+          component={Verify}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="UserRegister"
+          component={UserRegister}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
