@@ -24,7 +24,7 @@ const DateTimeDisplay = () => {
   const formattedTime = format(currentDateTime, "HH:mm:ss");
 
   return (
-    <View style={{ backgroundColor: Colors.white }}>
+    <View>
       <Text style={styles.date}>{formattedDate}</Text>
       <Text style={styles.time}>{formattedTime}</Text>
     </View>
@@ -33,17 +33,17 @@ const DateTimeDisplay = () => {
 
 const styles = StyleSheet.create({
   date: {
-    color: Colors.darkGray,
+    color: Colors.lightBlue,
     fontSize: 22,
     fontWeight: "bold",
     paddingHorizontal: 20,
-    paddingVertical: 10,
+    marginTop: 10,
   },
   time: {
-    color: Colors.darkGray,
+    color: Colors.lightBlue,
     fontSize: 18,
-    paddingHorizontal: 20,
-    paddingVertical: 10,
+    paddingHorizontal: 22,
+    marginTop: 5,
   },
 });
 
