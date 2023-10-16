@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.lightBlue,
     width: "100%",
     height: height * 1,
-    borderTopLeftRadius: width * 0.5,
+    borderTopRightRadius: width * 0.5,
     zIndex: 2,
     marginTop: height * -0.15,
   },

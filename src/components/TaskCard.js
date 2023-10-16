@@ -2,12 +2,14 @@ import React from "react";
 import { StyleSheet, Text, View, Image, Dimensions } from "react-native";
 import Colors from "../components/Colors";
 
+const { width, height } = Dimensions.get("window");
+
 const TaskCard = ({ title, description, date, time }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.activityTitle}>{title}</Text>
       <Text style={styles.activityDescription}>{description}</Text>
-      <View style={{ display: "flex", flexDirection: "row" }}>
+      <View style={{ display: "flex", flexDirection: "row", marginTop: 7 }}>
         <Text style={styles.activityDate}>{date}</Text>
         <Text style={styles.activityTime}>{time}</Text>
       </View>
@@ -20,28 +22,28 @@ export default TaskCard;
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "#EFEFF0", // Soft gray background
-    margin: 10,
+    margin: width * 0.03,
     borderRadius: 10,
-    padding: 15,
+    padding: width * 0.035,
     justifyContent: "space-between",
-    // alignItems: "center",
+    width: "95%",
   },
   activityTitle: {
-    fontSize: 20,
+    fontSize: width * 0.045,
     fontWeight: "bold",
-    color: "#000000", // Black
+    color: Colors.darkGray,
   },
   activityDescription: {
-    fontSize: 14,
-    color: "#333333", // Dark gray
+    fontSize: width * 0.035,
+    color: Colors.darkGray,
   },
   activityDate: {
-    fontSize: 16,
-    color: "#666666", // Slightly lighter gray
+    fontSize: width * 0.035,
+    color: Colors.darkGray,
   },
   activityTime: {
-    fontSize: 16,
+    fontSize: width * 0.035,
     color: Colors.vibrantOrange,
-    marginLeft: 20,
+    marginLeft: width * 0.04,
   },
 });

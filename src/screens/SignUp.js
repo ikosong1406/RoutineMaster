@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
   },
   c1: {
     backgroundColor: Colors.lightBlue,
-    width: width * 1,
+    width: "100%",
     height: height * 1,
     borderTopRightRadius: width * 0.5,
     zIndex: 2,

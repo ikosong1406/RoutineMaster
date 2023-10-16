@@ -8,7 +8,7 @@ import {
   SafeAreaView,
   Modal,
   TextInput,
-  ScrollView,
+  Dimensions,
 } from "react-native";
 import HorizontalRule from "../components/HorizontalRule";
 import DateTime from "../components/DateTime";
@@ -19,6 +19,8 @@ import { Entypo } from "@expo/vector-icons";
 import Task from "../components/Task";
 import { FAB } from "react-native-paper";
 import Checkbox from "../components/Checkbox";
+
+const { width, height } = Dimensions.get("window");
 
 const HomeScreen = ({ navigation }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -81,24 +83,29 @@ const HomeScreen = ({ navigation }) => {
         <TouchableOpacity onPress={drawerModal}>
           <Image
             source={require("../../assets/images/alex.jpg")}
-            style={{ width: 50, height: 50, borderRadius: 100, marginLeft: 10 }}
+            style={{
+              width: width * 0.13,
+              height: height * 0.06,
+              borderRadius: 100,
+              marginLeft: width * 0.03,
+            }}
           />
         </TouchableOpacity>
         <Text
           style={{
-            fontSize: 28,
-            marginLeft: 65,
+            fontSize: width * 0.08,
+            marginLeft: width * 0.06,
             fontWeight: "900",
             color: Colors.lightBlue,
           }}
         >
-          To-Do List
+          Tasks
         </Text>
         <FontAwesome
           name="search"
-          size={24}
+          size={width * 0.06}
           color="black"
-          style={{ marginLeft: 90 }}
+          style={{ marginLeft: width * 0.06 }}
         />
       </View>
       <DateTime />
@@ -124,7 +131,7 @@ const HomeScreen = ({ navigation }) => {
             <Text
               style={{
                 textAlign: "center",
-                fontSize: 24,
+                fontSize: width * 0.08,
                 fontWeight: "900",
                 color: Colors.darkGray,
               }}
@@ -135,7 +142,7 @@ const HomeScreen = ({ navigation }) => {
             <Text
               style={{
                 fontWeight: "700",
-                fontSize: 18,
+                fontSize: width * 0.04,
                 color: Colors.darkGray,
               }}
             >
@@ -150,7 +157,7 @@ const HomeScreen = ({ navigation }) => {
             <Text
               style={{
                 fontWeight: "700",
-                fontSize: 18,
+                fontSize: width * 0.04,
                 color: Colors.darkGray,
               }}
             >
@@ -164,7 +171,16 @@ const HomeScreen = ({ navigation }) => {
             />
             <View style={{ display: "flex", flexDirection: "row" }}>
               <View style={{ display: "flex", flexDirection: "row" }}>
-                <Text> Not Important </Text>
+                <Text
+                  style={{
+                    fontWeight: "700",
+                    fontSize: width * 0.04,
+                    color: Colors.darkGray,
+                  }}
+                >
+                  {" "}
+                  Not Important{" "}
+                </Text>
                 <Checkbox
                   checked={notimportant}
                   onPress={() => setNotimportant(!notimportant)}
@@ -174,22 +190,31 @@ const HomeScreen = ({ navigation }) => {
                 style={{
                   display: "flex",
                   flexDirection: "row",
-                  marginLeft: 34,
+                  marginLeft: width * 0.1,
                 }}
               >
-                <Text> Important </Text>
+                <Text
+                  style={{
+                    fontWeight: "700",
+                    fontSize: width * 0.04,
+                    color: Colors.darkGray,
+                  }}
+                >
+                  {" "}
+                  Important{" "}
+                </Text>
                 <Checkbox
                   checked={important}
                   onPress={() => setImportant(!important)}
                 />
               </View>
             </View>
-            <View style={{ marginTop: 20 }}>
+            <View style={{ marginTop: height * 0.03 }}>
               <View style={{ display: "flex", flexDirection: "row" }}>
                 <Text
                   style={{
                     fontWeight: "700",
-                    fontSize: 18,
+                    fontSize: width * 0.04,
                     color: Colors.darkGray,
                   }}
                 >
@@ -198,15 +223,21 @@ const HomeScreen = ({ navigation }) => {
                 <Text
                   style={{
                     fontWeight: "700",
-                    fontSize: 18,
+                    fontSize: width * 0.04,
                     color: Colors.darkGray,
-                    marginLeft: 160,
+                    marginLeft: width * 0.33,
                   }}
                 >
                   Time
                 </Text>
               </View>
-              <View style={{ display: "flex", flexDirection: "row" }}>
+              <View
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  marginTop: height * 0.005,
+                }}
+              >
                 <TextInput
                   style={styles.taskDateInput}
                   placeholder="dd/mm/yyyy"
@@ -222,7 +253,11 @@ const HomeScreen = ({ navigation }) => {
               </View>
             </View>
             <View
-              style={{ display: "flex", flexDirection: "row", marginTop: 20 }}
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                marginTop: height * 0.04,
+              }}
             >
               <TouchableOpacity
                 style={styles.cancelButton}
@@ -250,7 +285,7 @@ const HomeScreen = ({ navigation }) => {
           <View style={styles.drawerContent}>
             <FontAwesome
               name="close"
-              size={35}
+              size={width * 0.09}
               color={Colors.white}
               style={styles.closeButton}
               onPress={drawerModalClose}
@@ -260,21 +295,27 @@ const HomeScreen = ({ navigation }) => {
               Hello, Alexander Ikosong{" "}
             </Text>
             <View
-              style={{ display: "flex", flexDirection: "row", marginTop: 33 }}
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                marginTop: height * 0.04,
+              }}
             >
               <Image
                 source={require("../../assets/images/alex.jpg")}
                 style={{
-                  width: 80,
-                  height: 80,
-                  marginLeft: 10,
+                  width: width * 0.2,
+                  height: height * 0.1,
+                  marginLeft: width * 0.05,
                 }}
               />
-              <View style={{ marginLeft: 23, marginTop: 12 }}>
+              <View
+                style={{ marginLeft: width * 0.05, marginTop: height * 0.016 }}
+              >
                 <Text
                   style={{
                     color: Colors.white,
-                    fontSize: 16,
+                    fontSize: width * 0.035,
                     fontWeight: "400",
                   }}
                 >
@@ -284,36 +325,40 @@ const HomeScreen = ({ navigation }) => {
                 <TouchableOpacity
                   style={{
                     backgroundColor: Colors.lightGray,
-                    padding: 5,
-                    marginTop: 23,
+                    padding: width * 0.015,
+                    marginTop: width * 0.05,
                     borderRadius: 10,
                   }}
                 >
-                  <Text style={{ fontSize: 15, fontWeight: "900" }}>
+                  <Text style={{ fontSize: width * 0.04, fontWeight: "900" }}>
                     {" "}
                     Edit Profile{" "}
                   </Text>
                 </TouchableOpacity>
               </View>
             </View>
-            <View style={{ marginTop: 40 }}>
+            <View style={{ marginTop: height * 0.05 }}>
               <TouchableOpacity
                 style={{
                   display: "flex",
                   flexDirection: "row",
-                  padding: 20,
+                  padding: width * 0.05,
                   width: "100%",
                 }}
                 onPress={handleHome}
               >
-                <FontAwesome name="home" size={25} color={Colors.white} />
+                <FontAwesome
+                  name="home"
+                  size={width * 0.07}
+                  color={Colors.white}
+                />
                 <Text
                   style={{
-                    fontSize: 16,
+                    fontSize: width * 0.04,
                     fontWeight: "900",
                     color: Colors.white,
-                    marginLeft: 30,
-                    marginTop: 5,
+                    marginLeft: width * 0.08,
+                    marginTop: height * 0.01,
                   }}
                 >
                   Home
@@ -323,18 +368,22 @@ const HomeScreen = ({ navigation }) => {
                 style={{
                   display: "flex",
                   flexDirection: "row",
-                  padding: 20,
+                  padding: width * 0.05,
                   width: "100%",
                 }}
               >
-                <FontAwesome name="share-alt" size={25} color={Colors.white} />
+                <FontAwesome
+                  name="share-alt"
+                  size={width * 0.07}
+                  color={Colors.white}
+                />
                 <Text
                   style={{
-                    fontSize: 16,
+                    fontSize: width * 0.04,
                     fontWeight: "900",
                     color: Colors.white,
-                    marginLeft: 30,
-                    marginTop: 5,
+                    marginLeft: width * 0.08,
+                    marginTop: height * 0.01,
                   }}
                 >
                   Tell a friend
@@ -344,18 +393,18 @@ const HomeScreen = ({ navigation }) => {
                 style={{
                   display: "flex",
                   flexDirection: "row",
-                  padding: 20,
+                  padding: width * 0.05,
                   width: "100%",
                 }}
               >
-                <Entypo name="info" size={25} color={Colors.white} />
+                <Entypo name="info" size={width * 0.07} color={Colors.white} />
                 <Text
                   style={{
-                    fontSize: 16,
+                    fontSize: width * 0.04,
                     fontWeight: "900",
                     color: Colors.white,
-                    marginLeft: 30,
-                    marginTop: 5,
+                    marginLeft: width * 0.08,
+                    marginTop: height * 0.01,
                   }}
                 >
                   Information
@@ -365,18 +414,22 @@ const HomeScreen = ({ navigation }) => {
                 style={{
                   display: "flex",
                   flexDirection: "row",
-                  padding: 20,
+                  padding: width * 0.05,
                   width: "100%",
                 }}
               >
-                <Ionicons name="settings" size={25} color={Colors.white} />
+                <Ionicons
+                  name="settings"
+                  size={width * 0.07}
+                  color={Colors.white}
+                />
                 <Text
                   style={{
-                    fontSize: 16,
+                    fontSize: width * 0.04,
                     fontWeight: "900",
                     color: Colors.white,
-                    marginLeft: 30,
-                    marginTop: 5,
+                    marginLeft: width * 0.08,
+                    marginTop: height * 0.01,
                   }}
                 >
                   Setting
@@ -386,20 +439,24 @@ const HomeScreen = ({ navigation }) => {
                 style={{
                   display: "flex",
                   flexDirection: "row",
-                  padding: 20,
+                  padding: width * 0.05,
                   width: "100%",
                   marginTop: "100%",
                 }}
                 onPress={handleLogout}
               >
-                <FontAwesome name="power-off" size={25} color={Colors.white} />
+                <FontAwesome
+                  name="power-off"
+                  size={width * 0.07}
+                  color={Colors.white}
+                />
                 <Text
                   style={{
-                    fontSize: 16,
+                    fontSize: width * 0.04,
                     fontWeight: "900",
                     color: Colors.white,
-                    marginLeft: 30,
-                    marginTop: 5,
+                    marginLeft: width * 0.08,
+                    marginTop: height * 0.01,
                   }}
                 >
                   Logout
@@ -423,22 +480,22 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     backgroundColor: "#EFEFF0", // Light gray
-    padding: 10,
+    padding: width * 0.025,
   },
   dailyOverview: {
-    padding: 10,
+    padding: width * 0.02,
   },
   sectionTitle: {
-    fontSize: 24,
+    fontSize: width * 0.06,
     marginBottom: 10,
     textAlign: "center",
-    marginTop: 10,
+    marginTop: width * 0.02,
     color: Colors.lightBlue,
     fontWeight: "700",
   },
   fab: {
     position: "absolute",
-    margin: 16,
+    margin: width * 0.04,
     right: 0,
     bottom: 0,
     backgroundColor: Colors.vibrantOrange,
@@ -454,22 +511,22 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.vibrantOrange, // Lighter shade of Vibrant Orange
     borderRadius: 10,
     width: "90%", // Adjust width as needed
-    padding: 20,
+    padding: width * 0.04,
   },
   taskNameInput: {
     borderWidth: 1,
     borderColor: "gray",
     borderRadius: 10,
-    padding: 10,
-    marginBottom: 20,
+    padding: width * 0.02,
+    marginBottom: height * 0.02,
     color: Colors.darkGray,
   },
   taskDescriptionInput: {
     borderWidth: 1,
     borderColor: "gray",
     borderRadius: 10,
-    padding: 10,
-    marginBottom: 20,
+    padding: width * 0.02,
+    marginBottom: height * 0.02,
     color: Colors.darkGray,
     height: "20%",
   },
@@ -477,40 +534,42 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "gray",
     borderRadius: 10,
-    padding: 10,
-    marginBottom: 20,
+    padding: width * 0.02,
+    marginBottom: height * 0.02,
     color: Colors.darkGray,
+    width: "40%",
   },
   taskTimeInput: {
     borderWidth: 1,
     borderColor: "gray",
     borderRadius: 10,
-    padding: 10,
-    marginBottom: 20,
+    padding: width * 0.02,
+    marginBottom: height * 0.02,
     color: Colors.darkGray,
-    marginLeft: 80,
+    marginLeft: width * 0.06,
+    width: "40%",
   },
   createButton: {
     backgroundColor: "#66BB6A", // Green
-    padding: 10,
+    padding: width * 0.02,
     borderRadius: 10,
     alignItems: "center",
-    marginLeft: 150,
+    marginLeft: "45%",
   },
   createButtonText: {
     color: "#FFFFFF", // White text
-    fontSize: 25,
+    fontSize: width * 0.06,
     fontWeight: "bold",
   },
   cancelButton: {
     backgroundColor: "#FF4D4D", // Red
-    padding: 10,
+    padding: width * 0.02,
     borderRadius: 10,
     alignItems: "center",
   },
   cancelButtonText: {
     color: "#FFFFFF", // White text
-    fontSize: 25,
+    fontSize: width * 0.06,
     fontWeight: "bold",
   },
   drawerContainer: {
@@ -519,19 +578,18 @@ const styles = StyleSheet.create({
   },
   drawerContent: {
     backgroundColor: Colors.lightBlue, // Lighter shade of Vibrant Orange
-    borderTopRightRadius: 20,
-    borderBottomRightRadius: 20,
+    borderTopRightRadius: width * 0.04,
     width: "65%",
     height: "100%",
-    padding: 20,
+    padding: width * 0.04,
   },
   closeButton: {
-    marginLeft: 200,
+    marginLeft: "80%",
   },
   drawerHeaderText: {
-    fontSize: 22,
+    fontSize: width * 0.045,
     color: Colors.white,
-    marginTop: 32,
+    marginTop: height * 0.04,
   },
 });
 
