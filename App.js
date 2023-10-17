@@ -13,6 +13,9 @@ import Verify1 from "./src/screens/Verify1";
 import ResetPassword from "./src/screens/ResetPassword";
 import Verify from "./src/screens/Verify";
 import UserRegister from "./src/screens/UserResgister";
+import ShareScreen from "./src/screens/ShareScreen";
+import Information from "./src/screens/Information";
+import SettingsScreen from "./src/screens/Setting";
 
 const Stack = createStackNavigator();
 
@@ -80,6 +83,21 @@ const App = () => {
         <Stack.Screen
           name="UserRegister"
           component={UserRegister}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Share"
+          component={ShareScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Info"
+          component={Information}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Setting"
+          component={SettingsScreen}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

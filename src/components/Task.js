@@ -5,14 +5,24 @@ import {
   View,
   ScrollView,
   TouchableOpacity,
+  Dimensions,
+  Modal,
+  TextInput,
+  Button,
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { SwipeListView } from "react-native-swipe-list-view";
 import TaskCard from "./TaskCard"; // Import TaskCard
 import Colors from "./Colors";
+import HorizontalRule from "./HorizontalRule";
+import Checkbox from "./Checkbox";
+
+const { width, height } = Dimensions.get("window");
 
 const Task = () => {
   const [selectedFilter, setSelectedFilter] = useState("All");
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [editedTask, setEditedTask] = useState(null);
 
   const tasks = [
     {
@@ -86,8 +96,18 @@ const Task = () => {
     // Add more filter conditions as needed
   });
 
-  const handleTaskDetails = () => {
-    alert("task Details");
+  const handleTaskDetails = (task) => {
+    setEditedTask(task);
+    setIsModalVisible(true);
+  };
+
+  const handleSaveTask = () => {
+    alert("task editted and saved");
+    setIsModalVisible(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
   };
 
   const handleDelete = () => {
@@ -100,22 +120,36 @@ const Task = () => {
         style={{
           display: "flex",
           flexDirection: "row",
-          marginTop: 10,
+          marginTop: height * 0.01,
           marginBottom: 5,
         }}
       >
         <TouchableOpacity onPress={() => setSelectedFilter("All")}>
-          <Text style={{ fontSize: 20, marginLeft: 19, fontWeight: "900" }}>
+          <Text
+            style={{
+              fontSize: width * 0.05,
+              marginLeft: width * 0.04,
+              fontWeight: "900",
+            }}
+          >
             All
           </Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => setSelectedFilter("Important")}>
-          <Text style={{ fontSize: 20, marginLeft: 20, fontWeight: "900" }}>
+          <Text
+            style={{
+              fontSize: width * 0.05,
+              marginLeft: width * 0.04,
+              fontWeight: "900",
+            }}
+          >
             Important
           </Text>
         </TouchableOpacity>
       </View>
-      <ScrollView style={{ width: "100%", height: 600, paddingBottom: 100 }}>
+      <ScrollView
+        style={{ width: "100%", height: "80%", paddingBottom: height * 0.08 }}
+      >
         {filteredTasks.map((task, index) => (
           <SwipeListView
             data={[task]} // Pass the task as an array to the SwipeListView
@@ -135,7 +169,7 @@ const Task = () => {
                   style={{ marginTop: "2%" }}
                   onPress={handleDelete}
                 >
-                  <FontAwesome name="trash" size={30} color="black" />
+                  <FontAwesome name="trash" size={width * 0.08} color="black" />
                 </TouchableOpacity>
               </View>
             )}
@@ -143,6 +177,168 @@ const Task = () => {
           />
         ))}
       </ScrollView>
+      <Modal visible={isModalVisible} transparent={true} animationType="slide">
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            {editedTask && (
+              <View>
+                <Text
+                  style={{
+                    textAlign: "center",
+                    fontSize: width * 0.08,
+                    fontWeight: "900",
+                    color: Colors.darkGray,
+                  }}
+                >
+                  Edit Task
+                </Text>
+                <HorizontalRule />
+                <Text
+                  style={{
+                    fontWeight: "700",
+                    fontSize: width * 0.04,
+                    color: Colors.darkGray,
+                  }}
+                >
+                  Task Title
+                </Text>
+                <TextInput
+                  style={styles.taskNameInput}
+                  placeholder="Edit Title"
+                  value={editedTask.title}
+                  onChangeText={(text) =>
+                    setEditedTask({ ...editedTask, title: text })
+                  }
+                />
+                <Text
+                  style={{
+                    fontWeight: "700",
+                    fontSize: width * 0.04,
+                    color: Colors.darkGray,
+                  }}
+                >
+                  Description
+                </Text>
+                <TextInput
+                  style={styles.taskDescriptionInput}
+                  placeholder="Edit Description"
+                  value={editedTask.description}
+                  onChangeText={(text) =>
+                    setEditedTask({ ...editedTask, description: text })
+                  }
+                />
+                {/* <View style={{ display: "flex", flexDirection: "row" }}>
+                  <View style={{ display: "flex", flexDirection: "row" }}>
+                    <Text
+                      style={{
+                        fontWeight: "700",
+                        fontSize: width * 0.04,
+                        color: Colors.darkGray,
+                      }}
+                    >
+                      {" "}
+                      Not Important{" "}
+                    </Text>
+                    <Checkbox
+                      checked={notimportant}
+                      onPress={() => setNotimportant(!notimportant)}
+                    />
+                  </View>
+                  <View
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      marginLeft: width * 0.1,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontWeight: "700",
+                        fontSize: width * 0.04,
+                        color: Colors.darkGray,
+                      }}
+                    >
+                      {" "}
+                      Important{" "}
+                    </Text>
+                    <Checkbox
+                      checked={important}
+                      onPress={() => setImportant(!important)}
+                    />
+                  </View>
+                </View> */}
+                <View style={{ marginTop: height * 0.03 }}>
+                  <View style={{ display: "flex", flexDirection: "row" }}>
+                    <Text
+                      style={{
+                        fontWeight: "700",
+                        fontSize: width * 0.04,
+                        color: Colors.darkGray,
+                      }}
+                    >
+                      Date
+                    </Text>
+                    <Text
+                      style={{
+                        fontWeight: "700",
+                        fontSize: width * 0.04,
+                        color: Colors.darkGray,
+                        marginLeft: width * 0.33,
+                      }}
+                    >
+                      Time
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      marginTop: height * 0.005,
+                    }}
+                  >
+                    <TextInput
+                      style={styles.taskDateInput}
+                      placeholder="dd/mm/yyyy"
+                      value={editedTask.date}
+                      onChangeText={(text) =>
+                        setEditedTask({ ...editedTask, date: text })
+                      }
+                    />
+                    <TextInput
+                      style={styles.taskTimeInput}
+                      placeholder="hh : mm"
+                      value={editedTask.time}
+                      onChangeText={(text) =>
+                        setEditedTask({ ...editedTask, time: text })
+                      }
+                    />
+                  </View>
+                </View>
+                <View
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    marginTop: height * 0.04,
+                  }}
+                >
+                  <TouchableOpacity
+                    style={styles.cancelButton}
+                    onPress={handleCancel}
+                  >
+                    <Text style={styles.cancelButtonText}> Cancel </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.createButton}
+                    onPress={handleSaveTask}
+                  >
+                    <Text style={styles.createButtonText}> Save </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            )}
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -158,9 +354,82 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.sandyBeige,
     flex: 1,
     flexDirection: "row",
-    margin: 10,
+    marginTop: height * 0.02,
+    marginBottom: height * 0.02,
+    margin: width * 0.03,
     borderRadius: 10,
-    padding: 15,
-    marginTop: 17,
+    padding: width * 0.035,
+    width: "95%",
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.75)",
+  },
+  modalContent: {
+    backgroundColor: Colors.vibrantOrange, // Lighter shade of Vibrant Orange
+    borderRadius: 10,
+    width: "90%", // Adjust width as needed
+    padding: width * 0.04,
+  },
+  taskNameInput: {
+    borderWidth: 1,
+    borderColor: "gray",
+    borderRadius: 10,
+    padding: width * 0.02,
+    marginBottom: height * 0.02,
+    color: Colors.darkGray,
+  },
+  taskDescriptionInput: {
+    borderWidth: 1,
+    borderColor: "gray",
+    borderRadius: 10,
+    padding: width * 0.02,
+    marginBottom: height * 0.02,
+    color: Colors.darkGray,
+    height: "20%",
+  },
+  taskDateInput: {
+    borderWidth: 1,
+    borderColor: "gray",
+    borderRadius: 10,
+    padding: width * 0.02,
+    marginBottom: height * 0.02,
+    color: Colors.darkGray,
+    width: "40%",
+  },
+  taskTimeInput: {
+    borderWidth: 1,
+    borderColor: "gray",
+    borderRadius: 10,
+    padding: width * 0.02,
+    marginBottom: height * 0.02,
+    color: Colors.darkGray,
+    marginLeft: width * 0.06,
+    width: "40%",
+  },
+  createButton: {
+    backgroundColor: "#66BB6A", // Green
+    padding: width * 0.02,
+    borderRadius: 10,
+    alignItems: "center",
+    marginLeft: "45%",
+  },
+  createButtonText: {
+    color: "#FFFFFF", // White text
+    fontSize: width * 0.06,
+    fontWeight: "bold",
+  },
+  cancelButton: {
+    backgroundColor: "#FF4D4D", // Red
+    padding: width * 0.02,
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  cancelButtonText: {
+    color: "#FFFFFF", // White text
+    fontSize: width * 0.06,
+    fontWeight: "bold",
   },
 });

@@ -1,5 +1,7 @@
-import React from 'react';
-import { View, TouchableOpacity, StyleSheet } from 'react-native';
+import React from "react";
+import { View, TouchableOpacity, StyleSheet, Dimensions } from "react-native";
+
+const { width, height } = Dimensions.get("window");
 
 const Checkbox = ({ checked, onPress }) => {
   return (
@@ -11,17 +13,17 @@ const Checkbox = ({ checked, onPress }) => {
 
 const styles = StyleSheet.create({
   container: {
-    width: 20,
-    height: 20,
+    width: width * 0.047,
+    height: height * 0.022,
     borderWidth: 1,
-    borderColor: 'black',
-    justifyContent: 'center',
-    alignItems: 'center',
+    borderColor: "black",
+    justifyContent: "center",
+    alignItems: "center",
   },
   checkboxChecked: {
-    width: 14,
-    height: 14,
-    backgroundColor: 'black',
+    width: width * 0.035,
+    height: height * 0.017,
+    backgroundColor: "black",
   },
 });
 

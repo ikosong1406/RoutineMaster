@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Text, StyleSheet, View } from "react-native"; // Import View
+import { Text, StyleSheet, View, Dimensions } from "react-native"; // Import View
 import { format } from "date-fns";
 import Colors from "../components/Colors";
+
+const { width, height } = Dimensions.get("window");
 
 const DateTimeDisplay = () => {
   const [currentDateTime, setCurrentDateTime] = useState(new Date());
@@ -34,16 +36,16 @@ const DateTimeDisplay = () => {
 const styles = StyleSheet.create({
   date: {
     color: Colors.lightBlue,
-    fontSize: 22,
+    fontSize: width * 0.05,
     fontWeight: "bold",
-    paddingHorizontal: 20,
-    marginTop: 10,
+    paddingHorizontal: width * 0.045,
+    marginTop: height * 0.015,
   },
   time: {
     color: Colors.lightBlue,
-    fontSize: 18,
-    paddingHorizontal: 22,
-    marginTop: 5,
+    fontSize: width * 0.045,
+    paddingHorizontal: width * 0.045,
+    marginTop: height * 0.01,
   },
 });
 
