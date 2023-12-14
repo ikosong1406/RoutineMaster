@@ -51,13 +51,13 @@ export default Splash;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: Colors.lightBlue,
+    backgroundColor: Colors.Blue,
     flex: 1,
   },
   text: {
     fontFamily: "TiltPrism Variable",
     fontSize: width * 0.13,
-    color: Colors.vibrantOrange,
+    color: Colors.white,
     marginTop: height * 0.1,
     textAlign: "center",
   },
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: width * 0.5,
   },
   button: {
-    backgroundColor: Colors.vibrantOrange,
+    backgroundColor: Colors.Black,
     width: width * 0.5,
     height: height * 0.05,
     borderRadius: 8,
@@ -88,8 +88,9 @@ const styles = StyleSheet.create({
     marginTop: height * 0.13,
   },
   buttonText: {
-    color: Colors.darkGray,
+    color: Colors.white,
     textAlign: "center",
+    justifyContent: "center",
     marginTop: height * 0.01,
     fontSize: width * 0.05,
     fontWeight: "700",

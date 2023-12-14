@@ -68,9 +68,9 @@ const Verify1 = ({ navigation }) => {
             ) : (
               <Text
                 style={{
-                  color: Colors.darkGray,
+                  color: Colors.white,
                   fontWeight: "700",
-                  fontSize: width * 0.06,
+                  fontSize: width * 0.04,
                   textAlign: "center",
                 }}
               >
@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   c1: {
-    backgroundColor: Colors.lightBlue,
+    backgroundColor: Colors.Blue,
     width: "100%",
     height: height * 1,
     borderTopLeftRadius: width * 0.5,
@@ -113,8 +113,8 @@ const styles = StyleSheet.create({
   },
   text: {
     fontFamily: "TiltPrism Variable",
-    fontSize: width * 0.12,
-    color: Colors.darkGray,
+    fontSize: width * 0.1,
+    color: Colors.white,
     marginTop: height * 0.1,
     textAlign: "center",
   },
@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
     marginLeft: width * 0.03,
   },
   btn: {
-    backgroundColor: Colors.vibrantOrange,
+    backgroundColor: Colors.Black,
     borderRadius: 8,
     marginTop: height * 0.02,
     paddingVertical: height * 0.01,

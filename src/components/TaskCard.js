@@ -21,28 +21,29 @@ export default TaskCard;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#EFEFF0", // Soft gray background
-    margin: width * 0.03,
+    backgroundColor: "#EFEFF0",
+    margin: width * 0.02,
     borderRadius: 10,
     padding: width * 0.035,
-    justifyContent: "space-between",
+    height: height * 0.11,
     width: "95%",
+    justifyContent: "center",
   },
   activityTitle: {
-    fontSize: width * 0.045,
+    fontSize: width * 0.04,
     fontWeight: "bold",
     color: Colors.darkGray,
   },
   activityDescription: {
-    fontSize: width * 0.035,
+    fontSize: width * 0.03,
     color: Colors.darkGray,
   },
   activityDate: {
-    fontSize: width * 0.035,
+    fontSize: width * 0.03,
     color: Colors.darkGray,
   },
   activityTime: {
-    fontSize: width * 0.035,
+    fontSize: width * 0.03,
     color: Colors.vibrantOrange,
     marginLeft: width * 0.04,
   },

@@ -30,10 +30,10 @@ function BottomTabNavigator() {
       }}
     >
       <Tab.Screen
-        name="Home"
+        name="Task"
         component={HomeScreen}
         options={{
-          tabBarLabel: "Home",
+          tabBarLabel: "Task",
           tabBarIcon: ({ color }) => (
             <FontAwesome
               name="check-square-o"
@@ -48,7 +48,7 @@ function BottomTabNavigator() {
         name="Timetable"
         component={TimetableScreen}
         options={{
-          tabBarLabel: "Timetable",
+          tabBarLabel: "Timetabl",
           tabBarIcon: ({ color }) => (
             <AntDesign name="table" size={width * 0.08} color={color} />
           ),

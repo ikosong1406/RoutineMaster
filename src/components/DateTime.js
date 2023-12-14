@@ -35,14 +35,14 @@ const DateTimeDisplay = () => {
 
 const styles = StyleSheet.create({
   date: {
-    color: Colors.lightBlue,
+    color: Colors.Blue,
     fontSize: width * 0.05,
     fontWeight: "bold",
     paddingHorizontal: width * 0.045,
     marginTop: height * 0.015,
   },
   time: {
-    color: Colors.lightBlue,
+    color: Colors.Blue,
     fontSize: width * 0.045,
     paddingHorizontal: width * 0.045,
     marginTop: height * 0.01,

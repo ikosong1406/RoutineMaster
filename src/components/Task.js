@@ -120,14 +120,14 @@ const Task = () => {
         style={{
           display: "flex",
           flexDirection: "row",
-          marginTop: height * 0.01,
+          marginTop: height * 0.005,
           marginBottom: 5,
         }}
       >
         <TouchableOpacity onPress={() => setSelectedFilter("All")}>
           <Text
             style={{
-              fontSize: width * 0.05,
+              fontSize: width * 0.04,
               marginLeft: width * 0.04,
               fontWeight: "900",
             }}
@@ -138,7 +138,7 @@ const Task = () => {
         <TouchableOpacity onPress={() => setSelectedFilter("Important")}>
           <Text
             style={{
-              fontSize: width * 0.05,
+              fontSize: width * 0.04,
               marginLeft: width * 0.04,
               fontWeight: "900",
             }}
@@ -148,7 +148,7 @@ const Task = () => {
         </TouchableOpacity>
       </View>
       <ScrollView
-        style={{ width: "100%", height: "80%", paddingBottom: height * 0.08 }}
+        style={{ width: "100%", height: "87%", paddingBottom: height * 0.04 }}
       >
         {filteredTasks.map((task, index) => (
           <SwipeListView
@@ -169,11 +169,16 @@ const Task = () => {
                   style={{ marginTop: "2%" }}
                   onPress={handleDelete}
                 >
-                  <FontAwesome name="trash" size={width * 0.08} color="black" />
+                  <FontAwesome
+                    name="trash"
+                    size={width * 0.07}
+                    color={Colors.Overdue}
+                    style={{ marginLeft: "92%" }}
+                  />
                 </TouchableOpacity>
               </View>
             )}
-            leftOpenValue={60}
+            rightOpenValue={-60}
           />
         ))}
       </ScrollView>
@@ -185,7 +190,7 @@ const Task = () => {
                 <Text
                   style={{
                     textAlign: "center",
-                    fontSize: width * 0.08,
+                    fontSize: width * 0.04,
                     fontWeight: "900",
                     color: Colors.darkGray,
                   }}
@@ -196,7 +201,7 @@ const Task = () => {
                 <Text
                   style={{
                     fontWeight: "700",
-                    fontSize: width * 0.04,
+                    fontSize: width * 0.03,
                     color: Colors.darkGray,
                   }}
                 >
@@ -213,7 +218,7 @@ const Task = () => {
                 <Text
                   style={{
                     fontWeight: "700",
-                    fontSize: width * 0.04,
+                    fontSize: width * 0.03,
                     color: Colors.darkGray,
                   }}
                 >
@@ -227,52 +232,12 @@ const Task = () => {
                     setEditedTask({ ...editedTask, description: text })
                   }
                 />
-                {/* <View style={{ display: "flex", flexDirection: "row" }}>
+                <View style={{ marginTop: height * 0.02 }}>
                   <View style={{ display: "flex", flexDirection: "row" }}>
                     <Text
                       style={{
                         fontWeight: "700",
-                        fontSize: width * 0.04,
-                        color: Colors.darkGray,
-                      }}
-                    >
-                      {" "}
-                      Not Important{" "}
-                    </Text>
-                    <Checkbox
-                      checked={notimportant}
-                      onPress={() => setNotimportant(!notimportant)}
-                    />
-                  </View>
-                  <View
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      marginLeft: width * 0.1,
-                    }}
-                  >
-                    <Text
-                      style={{
-                        fontWeight: "700",
-                        fontSize: width * 0.04,
-                        color: Colors.darkGray,
-                      }}
-                    >
-                      {" "}
-                      Important{" "}
-                    </Text>
-                    <Checkbox
-                      checked={important}
-                      onPress={() => setImportant(!important)}
-                    />
-                  </View>
-                </View> */}
-                <View style={{ marginTop: height * 0.03 }}>
-                  <View style={{ display: "flex", flexDirection: "row" }}>
-                    <Text
-                      style={{
-                        fontWeight: "700",
-                        fontSize: width * 0.04,
+                        fontSize: width * 0.03,
                         color: Colors.darkGray,
                       }}
                     >
@@ -281,7 +246,7 @@ const Task = () => {
                     <Text
                       style={{
                         fontWeight: "700",
-                        fontSize: width * 0.04,
+                        fontSize: width * 0.03,
                         color: Colors.darkGray,
                         marginLeft: width * 0.33,
                       }}
@@ -293,7 +258,6 @@ const Task = () => {
                     style={{
                       display: "flex",
                       flexDirection: "row",
-                      marginTop: height * 0.005,
                     }}
                   >
                     <TextInput
@@ -318,7 +282,8 @@ const Task = () => {
                   style={{
                     display: "flex",
                     flexDirection: "row",
-                    marginTop: height * 0.04,
+                    marginTop: height * 0.02,
+                    justifyContent: "space-between",
                   }}
                 >
                   <TouchableOpacity
@@ -351,15 +316,15 @@ const styles = StyleSheet.create({
     flexDirection: "column",
   },
   rowBack: {
-    backgroundColor: Colors.sandyBeige,
+    backgroundColor: Colors.Blue,
     flex: 1,
     flexDirection: "row",
     marginTop: height * 0.02,
     marginBottom: height * 0.02,
-    margin: width * 0.03,
+    margin: width * 0.02,
     borderRadius: 10,
-    padding: width * 0.035,
-    width: "95%",
+    padding: width * 0.03,
+    width: "93%",
   },
   modalContainer: {
     flex: 1,
@@ -368,16 +333,18 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.75)",
   },
   modalContent: {
-    backgroundColor: Colors.vibrantOrange, // Lighter shade of Vibrant Orange
+    backgroundColor: Colors.white,
+    borderColor: Colors.Blue,
+    borderWidth: 5,
     borderRadius: 10,
-    width: "90%", // Adjust width as needed
-    padding: width * 0.04,
+    width: "90%",
+    padding: width * 0.05,
   },
   taskNameInput: {
     borderWidth: 1,
     borderColor: "gray",
     borderRadius: 10,
-    padding: width * 0.02,
+    padding: width * 0.01,
     marginBottom: height * 0.02,
     color: Colors.darkGray,
   },
@@ -385,7 +352,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "gray",
     borderRadius: 10,
-    padding: width * 0.02,
+    padding: width * 0.01,
     marginBottom: height * 0.02,
     color: Colors.darkGray,
     height: "20%",
@@ -394,7 +361,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "gray",
     borderRadius: 10,
-    padding: width * 0.02,
+    padding: width * 0.01,
     marginBottom: height * 0.02,
     color: Colors.darkGray,
     width: "40%",
@@ -403,33 +370,32 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "gray",
     borderRadius: 10,
-    padding: width * 0.02,
+    padding: width * 0.01,
     marginBottom: height * 0.02,
     color: Colors.darkGray,
     marginLeft: width * 0.06,
     width: "40%",
   },
   createButton: {
-    backgroundColor: "#66BB6A", // Green
+    backgroundColor: Colors.Completed,
     padding: width * 0.02,
     borderRadius: 10,
     alignItems: "center",
-    marginLeft: "45%",
   },
   createButtonText: {
-    color: "#FFFFFF", // White text
-    fontSize: width * 0.06,
+    color: Colors.white,
+    fontSize: width * 0.04,
     fontWeight: "bold",
   },
   cancelButton: {
-    backgroundColor: "#FF4D4D", // Red
+    backgroundColor: Colors.Overdue,
     padding: width * 0.02,
     borderRadius: 10,
     alignItems: "center",
   },
   cancelButtonText: {
-    color: "#FFFFFF", // White text
-    fontSize: width * 0.06,
+    color: Colors.white,
+    fontSize: width * 0.04,
     fontWeight: "bold",
   },
 });

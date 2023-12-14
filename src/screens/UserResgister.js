@@ -64,7 +64,7 @@ const UserRegister = ({ navigation }) => {
             />
             <TextInput
               style={styles.input}
-              placeholder="Username"
+              placeholder="Fullname"
               value={email}
               onChangeText={(text) => setEmail(text)}
             />
@@ -103,9 +103,9 @@ const UserRegister = ({ navigation }) => {
             ) : (
               <Text
                 style={{
-                  color: Colors.darkGray,
+                  color: Colors.white,
                   fontWeight: "700",
-                  fontSize: width * 0.06,
+                  fontSize: width * 0.04,
                   textAlign: "center",
                 }}
               >
@@ -126,10 +126,10 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   c1: {
-    backgroundColor: Colors.lightBlue,
+    backgroundColor: Colors.Blue,
     width: "100%",
     height: height * 1,
-    borderTopRightRadius: width * 0.5,
+    borderTopLeftRadius: width * 0.5,
     zIndex: 2,
     marginTop: height * -0.15,
   },
@@ -140,8 +140,8 @@ const styles = StyleSheet.create({
   },
   text: {
     fontFamily: "TiltPrism Variable",
-    fontSize: width * 0.17,
-    color: Colors.darkGray,
+    fontSize: width * 0.1,
+    color: Colors.white,
     marginTop: height * 0.1,
     textAlign: "center",
   },
@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
     width: "60%",
   },
   btn: {
-    backgroundColor: Colors.vibrantOrange,
+    backgroundColor: Colors.Black,
     borderRadius: 8,
     marginTop: height * 0.02,
     paddingVertical: height * 0.01,

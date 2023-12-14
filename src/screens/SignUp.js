@@ -164,17 +164,17 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   c1: {
-    backgroundColor: Colors.lightBlue,
+    backgroundColor: Colors.Blue,
     width: "100%",
     height: height * 1,
-    borderTopRightRadius: width * 0.5,
+    borderTopLeftRadius: width * 0.5,
     zIndex: 2,
     marginTop: height * -0.15,
   },
   text: {
     fontFamily: "TiltPrism Variable",
-    fontSize: width * 0.17,
-    color: Colors.darkGray,
+    fontSize: width * 0.1,
+    color: Colors.white,
     marginTop: height * 0.1,
     textAlign: "center",
   },
@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
     marginLeft: width * 0.03,
   },
   signupButton: {
-    backgroundColor: Colors.vibrantOrange,
+    backgroundColor: Colors.Black,
     borderRadius: 8,
     marginTop: height * 0.02,
     paddingVertical: height * 0.01,
@@ -191,9 +191,9 @@ const styles = StyleSheet.create({
     marginTop: height * 0.03,
   },
   signupButtonText: {
-    color: Colors.darkGray,
+    color: Colors.white,
     fontWeight: "700",
-    fontSize: width * 0.06,
+    fontSize: width * 0.04,
     textAlign: "center",
   },
   termsContainer: {
@@ -205,13 +205,13 @@ const styles = StyleSheet.create({
     marginLeft: width * 0.02,
   },
   termsText: {
-    fontSize: width * 0.05,
+    fontSize: width * 0.04,
     fontWeight: "400",
     marginLeft: width * 0.03,
   },
   termsLink: {
-    color: Colors.lightGray,
-    fontSize: width * 0.05,
+    color: Colors.vibrantOrange,
+    fontSize: width * 0.04,
     fontWeight: "400",
     marginLeft: width * 0.03,
   },
@@ -219,10 +219,10 @@ const styles = StyleSheet.create({
     /* Styles for login link container */
   },
   loginLinkText: {
-    fontSize: width * 0.05,
+    fontSize: width * 0.04,
     fontWeight: "400",
     marginLeft: width * 0.03,
-    color: Colors.lightGray,
+    color: Colors.vibrantOrange,
     textAlign: "center",
   },
 });

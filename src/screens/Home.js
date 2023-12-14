@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import {
   View,
   Text,
@@ -9,123 +9,208 @@ import {
   Modal,
   TextInput,
   Dimensions,
+  Button,
+  CheckBox,
+  FlatList,
+  Alert,
 } from "react-native";
 import HorizontalRule from "../components/HorizontalRule";
+import * as Notifications from "expo-notifications";
 import DateTime from "../components/DateTime";
 import Colors from "../components/Colors";
-import { FontAwesome } from "@expo/vector-icons";
-import { Ionicons } from "@expo/vector-icons";
-import { Entypo } from "@expo/vector-icons";
 import Task from "../components/Task";
 import { FAB } from "react-native-paper";
+import themeContext from "../components/themeContext";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 import Checkbox from "../components/Checkbox";
 
 const { width, height } = Dimensions.get("window");
 
 const HomeScreen = ({ navigation }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [isModalDrawer, setIsModalDrawer] = useState(false);
-  const [taskName, setTaskName] = useState("");
-  const [taskDescription, setTaskDescription] = useState("");
-  const [taskDate, setTaskDate] = useState("");
-  const [taskTime, setTaskTime] = useState("");
-  const [important, setImportant] = useState(false);
-  const [notimportant, setNotimportant] = useState(false);
-  const [isNavigating, setIsNavigating] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [isImportant, setIsImportant] = useState(false);
+  const [date, setDate] = useState(new Date());
+  const [alarms, setAlarms] = useState([]);
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [expoPushToken, setExpoPushToken] = useState("");
+  const [notification, setNotification] = useState(false);
+  const notificationListener = useRef();
+  const responseListener = useRef();
+
+  useEffect(() => {
+    // Fetch and display existing alarms
+    fetchAlarms();
+  }, []);
+
+  const fetchAlarms = async () => {
+    const allScheduledNotifications =
+      await Notifications.getAllScheduledNotificationsAsync();
+    setAlarms(allScheduledNotifications);
+  };
+
+  useEffect(() => {
+    const registerForPushNotifications = async () => {
+      try {
+        const { status } = await Notifications.getPermissionsAsync();
+        console.log("Notification permissions status:", status);
+
+        if (status !== "granted") {
+          const { status: newStatus } =
+            await Notifications.requestPermissionsAsync();
+          if (newStatus === "granted") {
+            const expoPushToken = (await Notifications.getExpoPushTokenAsync())
+              .data;
+            console.log("Expo push token:", expoPushToken);
+            setExpoPushToken(expoPushToken);
+          } else {
+            // Handle the case where the user declines permissions again
+            // You might want to show an alert or guide the user to enable notifications
+          }
+        } else {
+          const expoPushToken = (await Notifications.getExpoPushTokenAsync())
+            .data;
+          console.log("Expo push token:", expoPushToken);
+          setExpoPushToken(expoPushToken);
+        }
+      } catch (error) {
+        console.error("Error registering for push notifications:", error);
+      }
+    };
+
+    registerForPushNotifications();
+
+    notificationListener.current =
+      Notifications.addNotificationReceivedListener((notification) => {
+        setNotification(notification);
+      });
+
+    responseListener.current =
+      Notifications.addNotificationResponseReceivedListener((response) => {
+        console.log(response);
+      });
+
+    return () => {
+      Notifications.removeNotificationSubscription(
+        notificationListener.current
+      );
+      Notifications.removeNotificationSubscription(responseListener.current);
+    };
+  }, []);
+
+  const scheduleAlarm = async () => {
+    try {
+      const notificationDate = new Date(date);
+      const identifier = await Notifications.scheduleNotificationAsync({
+        content: {
+          title: "Alarm",
+          body: `Task: ${title}\nDescription: ${description}`,
+        },
+        trigger: {
+          date: notificationDate,
+        },
+      });
+
+      // Store the identifier or any other necessary information
+      console.log("Scheduled notification identifier:", identifier);
+
+      // Fetch and display updated alarms
+      fetchAlarms();
+
+      // Clear the input fields
+      setTitle("");
+      setDescription("");
+    } catch (error) {
+      console.error("Error scheduling alarm:", error);
+    }
+  };
+
+  const deleteAlarm = async (identifier) => {
+    try {
+      await Notifications.cancelScheduledNotificationAsync(identifier);
+      // Fetch and display updated alarms
+      fetchAlarms();
+    } catch (error) {
+      console.error("Error deleting alarm:", error);
+    }
+  };
+
+  const confirmDelete = (identifier) => {
+    Alert.alert(
+      "Confirm Delete",
+      "Are you sure you want to delete this alarm?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        { text: "OK", onPress: () => deleteAlarm(identifier) },
+      ],
+      { cancelable: false }
+    );
+  };
+
+  const showDatePicker = () => {
+    setDatePickerVisibility(true);
+  };
+
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
+
+  const handleConfirm = (date) => {
+    console.warn("A date has been picked: ", date);
+    hideDatePicker();
+  };
 
   const toggleModal = () => {
     setIsModalVisible(!isModalVisible);
-  };
-  const drawerModal = () => {
-    setIsModalDrawer(!isModalDrawer);
-  };
-  const drawerModalClose = () => {
-    setIsModalDrawer(false);
-  };
-
-  const handleCreateTimetable = () => {
-    alert("Creating task:", taskName);
-    setIsModalVisible(false);
   };
 
   const handleCancel = () => {
     setIsModalVisible(false);
   };
+  const theme = useContext(themeContext);
 
-  const handleLogout = () => {
-    closeModal();
-    setIsNavigating(true);
-  };
-
-  const closeModal = () => {
-    setIsModalDrawer(false);
-  };
-
-  useEffect(() => {
-    if (isNavigating) {
-      // Introduce a 2-second delay before navigating
-      setTimeout(() => {
-        navigation.navigate("Login");
-      }, 2000); // 2000 milliseconds (2 seconds)
-    }
-  }, [isNavigating]);
-
-  const handleHome = () => {
-    setIsModalDrawer(false);
-    navigation.navigate("Tab");
-  };
-
-  const handleShare = () => {
-    setIsModalDrawer(false);
-    navigation.navigate("Share");
-  };
-
-  const handleInfo = () => {
-    setIsModalDrawer(false);
-    navigation.navigate("Info");
-  };
-
-  const handleSetting = () => {
-    setIsModalDrawer(false);
-    navigation.navigate("Setting");
-  };
+  console.log("Scheduled alarms:", alarms);
+  console.log("Expo push token:", expoPushToken);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={drawerModal}>
-          <Image
-            source={require("../../assets/images/alex.jpg")}
-            style={{
-              width: width * 0.13,
-              height: height * 0.06,
-              borderRadius: 100,
-              marginLeft: width * 0.03,
-            }}
-          />
-        </TouchableOpacity>
-        <Text
-          style={{
-            fontSize: width * 0.08,
-            marginLeft: width * 0.06,
-            fontWeight: "900",
-            color: Colors.lightBlue,
-          }}
-        >
-          Tasks
-        </Text>
-        <FontAwesome
-          name="search"
-          size={width * 0.06}
-          color="black"
-          style={{ marginLeft: width * 0.06 }}
-        />
-      </View>
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: theme.background }]}
+    >
       <DateTime />
       <View style={styles.dailyOverview}>
-        <Text style={styles.sectionTitle}>Daily Overview</Text>
-        <Task />
+        <Text style={[styles.sectionTitle, { color: theme.textColor }]}>
+          Daily Overview
+        </Text>
+        {/* <Task /> */}
+        <Text>Your expo push token: {expoPushToken}</Text>
+        <View style={{ alignItems: "center", justifyContent: "center" }}>
+          <Text>
+            Title: {notification && notification.request.content.title}{" "}
+          </Text>
+          <Text>Body: {notification && notification.request.content.body}</Text>
+          <Text>
+            Data:{" "}
+            {notification && JSON.stringify(notification.request.content.data)}
+          </Text>
+        </View>
+        <FlatList
+          data={alarms}
+          keyExtractor={(item) => item.identifier}
+          renderItem={({ item }) => (
+            <View>
+              <Text>{item.content.body}</Text>
+              <Button
+                title="Delete"
+                onPress={() => confirmDelete(item.identifier)}
+              />
+            </View>
+          )}
+        />
       </View>
       <FAB
         style={styles.fab}
@@ -141,136 +226,58 @@ const HomeScreen = ({ navigation }) => {
         onRequestClose={toggleModal}
       >
         <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
+          <View
+            style={[styles.modalContent, { backgroundColor: theme.background }]}
+          >
             <Text
               style={{
                 textAlign: "center",
-                fontSize: width * 0.08,
+                fontSize: width * 0.04,
                 fontWeight: "900",
                 color: Colors.darkGray,
+                color: theme.textColor,
               }}
             >
               New Task
             </Text>
             <HorizontalRule />
-            <Text
-              style={{
-                fontWeight: "700",
-                fontSize: width * 0.04,
-                color: Colors.darkGray,
-              }}
-            >
-              Task Title
-            </Text>
             <TextInput
-              style={styles.taskNameInput}
-              placeholder="Add Task Name"
-              value={taskName}
-              onChangeText={(text) => setTaskName(text)}
+              placeholder="Task Title"
+              value={title}
+              onChangeText={setTitle}
             />
-            <Text
-              style={{
-                fontWeight: "700",
-                fontSize: width * 0.04,
-                color: Colors.darkGray,
-              }}
-            >
-              Description
-            </Text>
             <TextInput
-              style={styles.taskDescriptionInput}
-              placeholder="Add Description"
-              value={taskDescription}
-              onChangeText={(text) => setTaskDescription(text)}
+              placeholder="Task Description"
+              value={description}
+              onChangeText={setDescription}
             />
-            <View style={{ display: "flex", flexDirection: "row" }}>
-              <View style={{ display: "flex", flexDirection: "row" }}>
-                <Text
-                  style={{
-                    fontWeight: "700",
-                    fontSize: width * 0.04,
-                    color: Colors.darkGray,
-                  }}
-                >
-                  {" "}
-                  Not Important{" "}
-                </Text>
-                <Checkbox
-                  checked={notimportant}
-                  onPress={() => setNotimportant(!notimportant)}
-                />
-              </View>
-              <View
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  marginLeft: width * 0.1,
-                }}
-              >
-                <Text
-                  style={{
-                    fontWeight: "700",
-                    fontSize: width * 0.04,
-                    color: Colors.darkGray,
-                  }}
-                >
-                  {" "}
-                  Important{" "}
-                </Text>
-                <Checkbox
-                  checked={important}
-                  onPress={() => setImportant(!important)}
-                />
-              </View>
-            </View>
-            <View style={{ marginTop: height * 0.03 }}>
-              <View style={{ display: "flex", flexDirection: "row" }}>
-                <Text
-                  style={{
-                    fontWeight: "700",
-                    fontSize: width * 0.04,
-                    color: Colors.darkGray,
-                  }}
-                >
-                  Date
-                </Text>
-                <Text
-                  style={{
-                    fontWeight: "700",
-                    fontSize: width * 0.04,
-                    color: Colors.darkGray,
-                    marginLeft: width * 0.33,
-                  }}
-                >
-                  Time
-                </Text>
-              </View>
-              <View
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  marginTop: height * 0.005,
-                }}
-              >
-                <TextInput
-                  style={styles.taskDateInput}
-                  placeholder="dd/mm/yyyy"
-                  value={taskDate}
-                  onChangeText={(text) => setTaskDate(text)}
-                />
-                <TextInput
-                  style={styles.taskTimeInput}
-                  placeholder="hh : mm"
-                  value={taskTime}
-                  onChangeText={(text) => setTaskTime(text)}
-                />
-              </View>
-            </View>
-            <View
+            {/* <CheckBox
+              value={isImportant}
+              onValueChange={setIsImportant}
+              title="Is Important?"
+            /> */}
+            <Button title="Show Date Picker" onPress={showDatePicker} />
+            <DateTimePickerModal
+              isVisible={isDatePickerVisible}
+              mode="datetime"
+              is24Hour={true}
+              display="default"
+              onChange={(event, selectedDate) => {
+                if (selectedDate) {
+                  setDate(selectedDate);
+                  setSelectedDate(selectedDate); // if needed
+                }
+              }}
+              onConfirm={handleConfirm}
+              onCancel={hideDatePicker}
+            />
+            <Button title="Create Alarm" onPress={scheduleAlarm} />
+            {/* <View
               style={{
                 display: "flex",
                 flexDirection: "row",
-                marginTop: height * 0.04,
+                marginTop: height * 0.03,
+                justifyContent: "space-between",
               }}
             >
               <TouchableOpacity
@@ -285,201 +292,7 @@ const HomeScreen = ({ navigation }) => {
               >
                 <Text style={styles.createButtonText}> Create </Text>
               </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </Modal>
-      <Modal
-        animationType="fade"
-        transparent={true}
-        visible={isModalDrawer}
-        onRequestClose={drawerModal}
-      >
-        <View style={styles.drawerContainer}>
-          <View style={styles.drawerContent}>
-            <FontAwesome
-              name="close"
-              size={width * 0.09}
-              color={Colors.white}
-              style={styles.closeButton}
-              onPress={drawerModalClose}
-            />
-            <Text style={styles.drawerHeaderText}>
-              {" "}
-              Hello, Alexander Ikosong{" "}
-            </Text>
-            <View
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                marginTop: height * 0.04,
-              }}
-            >
-              <Image
-                source={require("../../assets/images/alex.jpg")}
-                style={{
-                  width: width * 0.2,
-                  height: height * 0.1,
-                  marginLeft: width * 0.05,
-                }}
-              />
-              <View
-                style={{ marginLeft: width * 0.05, marginTop: height * 0.016 }}
-              >
-                <Text
-                  style={{
-                    color: Colors.white,
-                    fontSize: width * 0.035,
-                    fontWeight: "400",
-                  }}
-                >
-                  {" "}
-                  @derealalexis{" "}
-                </Text>
-                <TouchableOpacity
-                  style={{
-                    backgroundColor: Colors.lightGray,
-                    padding: width * 0.015,
-                    marginTop: width * 0.05,
-                    borderRadius: 10,
-                  }}
-                >
-                  <Text style={{ fontSize: width * 0.04, fontWeight: "900" }}>
-                    {" "}
-                    Edit Profile{" "}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-            <View style={{ marginTop: height * 0.05 }}>
-              <TouchableOpacity
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  padding: width * 0.05,
-                  width: "100%",
-                }}
-                onPress={handleHome}
-              >
-                <FontAwesome
-                  name="home"
-                  size={width * 0.07}
-                  color={Colors.white}
-                />
-                <Text
-                  style={{
-                    fontSize: width * 0.04,
-                    fontWeight: "900",
-                    color: Colors.white,
-                    marginLeft: width * 0.08,
-                    marginTop: height * 0.01,
-                  }}
-                >
-                  Home
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  padding: width * 0.05,
-                  width: "100%",
-                }}
-                onPress={handleShare}
-              >
-                <FontAwesome
-                  name="share-alt"
-                  size={width * 0.07}
-                  color={Colors.white}
-                />
-                <Text
-                  style={{
-                    fontSize: width * 0.04,
-                    fontWeight: "900",
-                    color: Colors.white,
-                    marginLeft: width * 0.08,
-                    marginTop: height * 0.01,
-                  }}
-                >
-                  Tell a friend
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  padding: width * 0.05,
-                  width: "100%",
-                }}
-                onPress={handleInfo}
-              >
-                <Entypo name="info" size={width * 0.07} color={Colors.white} />
-                <Text
-                  style={{
-                    fontSize: width * 0.04,
-                    fontWeight: "900",
-                    color: Colors.white,
-                    marginLeft: width * 0.08,
-                    marginTop: height * 0.01,
-                  }}
-                >
-                  Information
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  padding: width * 0.05,
-                  width: "100%",
-                }}
-                onPress={handleSetting}
-              >
-                <Ionicons
-                  name="settings"
-                  size={width * 0.07}
-                  color={Colors.white}
-                />
-                <Text
-                  style={{
-                    fontSize: width * 0.04,
-                    fontWeight: "900",
-                    color: Colors.white,
-                    marginLeft: width * 0.08,
-                    marginTop: height * 0.01,
-                  }}
-                >
-                  Setting
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  padding: width * 0.05,
-                  width: "100%",
-                  marginTop: "100%",
-                }}
-                onPress={handleLogout}
-              >
-                <FontAwesome
-                  name="power-off"
-                  size={width * 0.07}
-                  color={Colors.white}
-                />
-                <Text
-                  style={{
-                    fontSize: width * 0.04,
-                    fontWeight: "900",
-                    color: Colors.white,
-                    marginLeft: width * 0.08,
-                    marginTop: height * 0.01,
-                  }}
-                >
-                  Logout
-                </Text>
-              </TouchableOpacity>
-            </View>
+            </View> */}
           </View>
         </View>
       </Modal>
@@ -490,24 +303,16 @@ const HomeScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.white,
-  },
-  header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    backgroundColor: "#EFEFF0", // Light gray
-    padding: width * 0.025,
   },
   dailyOverview: {
-    padding: width * 0.02,
+    padding: width * 0.01,
   },
   sectionTitle: {
-    fontSize: width * 0.06,
+    fontSize: width * 0.05,
     marginBottom: 10,
     textAlign: "center",
     marginTop: width * 0.02,
-    color: Colors.lightBlue,
+    color: Colors.Blue,
     fontWeight: "700",
   },
   fab: {
@@ -515,8 +320,8 @@ const styles = StyleSheet.create({
     margin: width * 0.04,
     right: 0,
     bottom: 0,
-    backgroundColor: Colors.vibrantOrange,
-    color: "white",
+    backgroundColor: Colors.Blue,
+    color: Colors.vibrantOrange,
   },
   modalContainer: {
     flex: 1,
@@ -525,16 +330,18 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.75)",
   },
   modalContent: {
-    backgroundColor: Colors.vibrantOrange, // Lighter shade of Vibrant Orange
+    backgroundColor: Colors.white,
+    borderColor: Colors.Blue,
+    borderWidth: 5,
     borderRadius: 10,
-    width: "90%", // Adjust width as needed
-    padding: width * 0.04,
+    width: "90%",
+    padding: width * 0.05,
   },
   taskNameInput: {
     borderWidth: 1,
     borderColor: "gray",
     borderRadius: 10,
-    padding: width * 0.02,
+    padding: width * 0.01,
     marginBottom: height * 0.02,
     color: Colors.darkGray,
   },
@@ -542,7 +349,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "gray",
     borderRadius: 10,
-    padding: width * 0.02,
+    padding: width * 0.01,
     marginBottom: height * 0.02,
     color: Colors.darkGray,
     height: "20%",
@@ -551,7 +358,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "gray",
     borderRadius: 10,
-    padding: width * 0.02,
+    padding: width * 0.01,
     marginBottom: height * 0.02,
     color: Colors.darkGray,
     width: "40%",
@@ -567,46 +374,26 @@ const styles = StyleSheet.create({
     width: "40%",
   },
   createButton: {
-    backgroundColor: "#66BB6A", // Green
+    backgroundColor: Colors.Completed,
     padding: width * 0.02,
     borderRadius: 10,
     alignItems: "center",
-    marginLeft: "45%",
   },
   createButtonText: {
-    color: "#FFFFFF", // White text
-    fontSize: width * 0.06,
+    color: Colors.white,
+    fontSize: width * 0.04,
     fontWeight: "bold",
   },
   cancelButton: {
-    backgroundColor: "#FF4D4D", // Red
+    backgroundColor: Colors.Overdue,
     padding: width * 0.02,
     borderRadius: 10,
     alignItems: "center",
   },
   cancelButtonText: {
-    color: "#FFFFFF", // White text
-    fontSize: width * 0.06,
-    fontWeight: "bold",
-  },
-  drawerContainer: {
-    flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.75)",
-  },
-  drawerContent: {
-    backgroundColor: Colors.lightBlue, // Lighter shade of Vibrant Orange
-    borderTopRightRadius: width * 0.04,
-    width: "65%",
-    height: "100%",
-    padding: width * 0.04,
-  },
-  closeButton: {
-    marginLeft: "80%",
-  },
-  drawerHeaderText: {
-    fontSize: width * 0.045,
     color: Colors.white,
-    marginTop: height * 0.04,
+    fontSize: width * 0.04,
+    fontWeight: "bold",
   },
 });
 
