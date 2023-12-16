@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
   text: {
     fontFamily: "TiltPrism Variable",
     fontSize: width * 0.1,
-    color: Colors.darkGray,
+    color: Colors.white,
     marginTop: height * 0.1,
     textAlign: "center",
   },
