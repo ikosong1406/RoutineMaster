@@ -4,16 +4,13 @@ import {
   Text,
   TouchableOpacity,
   Modal,
-  TextInput,
   StyleSheet,
-  Image,
-  FlatList,
   Dimensions,
   SafeAreaView,
 } from "react-native";
 import { FAB } from "react-native-paper";
-import TimetableCard from "../components/TimetableCard";
-import CreateTimetable from "../components/CreateTimetable";
+import TimetableList from "../components/TimetableList";
+import TimetableForm from "../components/TimetableForm";
 import Colors from "../components/Colors";
 import themeContext from "../components/themeContext";
 
@@ -21,32 +18,22 @@ const { width, height } = Dimensions.get("window");
 
 const TimetableScreen = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [timetableName, setTimetableName] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [timetable, setTimetable] = useState([
-    // Dummy timetable data
-    { id: 1, name: "Timetable 1", description: "Description of Timetable 1" },
-    { id: 2, name: "Timetable 2", description: "Description of Timetable 2" },
-    { id: 3, name: "Timetable 3", description: "Description of Timetable 3" },
-  ]);
-  const [selectedTimetable, setSelectedTimetable] = useState(null);
+  const [timetable, setTimetable] = useState([]);
 
-  const toggleModal = () => {
-    setIsModalVisible(!isModalVisible);
-  };
-
-  const handleCreateTimetable = () => {
-    // Implement your create timetable logic here
-    console.log("Creating timetable:", timetableName);
+  const addTimetable = (newTimetable) => {
+    setTimetable((prevTimetable) => [...prevTimetable, newTimetable]);
     setIsModalVisible(false);
   };
 
-  const showTimetableDetails = (timetable) => {
-    setSelectedTimetable(timetable);
+  const deleteTimetable = (timetableId) => {
+    const updatedTimetable = timetable.filter(
+      (timetable) => timetable.id !== timetableId
+    );
+    setTimetable(updatedTimetable);
   };
 
-  const closeTimetableDetails = () => {
-    setSelectedTimetable(null);
+  const toggleModal = () => {
+    setIsModalVisible(!isModalVisible);
   };
 
   const theme = useContext(themeContext);
@@ -55,18 +42,7 @@ const TimetableScreen = () => {
     <SafeAreaView
       style={[styles.container, { backgroundColor: theme.background }]}
     >
-      {timetable.map((timetable) => (
-        <TouchableOpacity
-          key={timetable.id}
-          style={styles.timetableCard}
-          onPress={() => showTimetableDetails(timetable)}
-        >
-          <Text style={styles.timetableName}>{timetable.name}</Text>
-          <Text style={styles.timetableDescription}>
-            {timetable.description}
-          </Text>
-        </TouchableOpacity>
-      ))}
+      <TimetableList timetable={timetable} onDeleteTask={deleteTimetable} />
       <Modal
         animationType="slide"
         transparent={true}
@@ -75,54 +51,24 @@ const TimetableScreen = () => {
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <CreateTimetable />
-            <TouchableOpacity
-              style={styles.createButton}
-              onPress={handleCreateTimetable}
+            <Text
+              style={{
+                textAlign: "center",
+                fontSize: width * 0.04,
+                fontWeight: "900",
+                color: Colors.darkGray,
+                color: theme.textColor,
+              }}
             >
-              <Text style={styles.createButtonText}>Create</Text>
-            </TouchableOpacity>
+              New Timetable
+            </Text>
+            <TimetableForm onSubmit={addTimetable} />
             <TouchableOpacity style={styles.cancelButton} onPress={toggleModal}>
               <Text style={styles.cancelButtonText}>Cancel</Text>
             </TouchableOpacity>
           </View>
         </View>
       </Modal>
-      {
-        /* Display Full Timetable Details */
-        selectedTimetable && (
-          <Modal
-            animationType="slide"
-            transparent={true}
-            visible={!!selectedTimetable}
-            onRequestClose={closeTimetableDetails}
-          >
-            <View style={styles.modalContainer}>
-              <View style={styles.modalContent}>
-                <Text style={styles.timetableName}>
-                  {selectedTimetable.name}
-                </Text>
-                <Text style={styles.timetableDescription}>
-                  {selectedTimetable.description}
-                </Text>
-                <TimetableCard />
-                <TouchableOpacity
-                  style={styles.deleteButton}
-                  onPress={closeTimetableDetails}
-                >
-                  <Text style={styles.closeButtonText}>Delete</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.closeButton}
-                  onPress={closeTimetableDetails}
-                >
-                  <Text style={styles.closeButtonText}>Close</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </Modal>
-        )
-      }
       <FAB
         style={styles.fab}
         icon="plus"
@@ -157,8 +103,8 @@ const styles = StyleSheet.create({
     borderColor: Colors.Blue,
     borderWidth: 5,
     borderRadius: 10,
-    padding: width * 0.05,
-    width: "90%",
+    padding: width * 0.02,
+    width: "95%",
   },
   timetableNameInput: {
     borderWidth: 1,

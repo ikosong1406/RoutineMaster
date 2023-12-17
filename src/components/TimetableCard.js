@@ -4,16 +4,6 @@ import { View, Text, StyleSheet, FlatList, Dimensions } from "react-native";
 const { width, height } = Dimensions.get("window");
 
 const TimetableCard = () => {
-  const weekDays = [
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-    "Sunday",
-  ];
-
   const foodTimetableData = [
     {
       day: "Monday",
